@@ -79,8 +79,8 @@ class Client:
     @staticmethod
     def get_input():
         """
-       This is a reST style.
+        Get input from user console
 
-       :returns: input from the user console
-       """
+        :returns: input from the user console
+        """
         return input()

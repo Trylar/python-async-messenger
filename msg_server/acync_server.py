@@ -28,8 +28,8 @@ class Server:
 
     async def start_server(self):
         """
-       Function starting server
-       """
+        Function starting server
+        """
         self.server = await asyncio.start_server(self.connection_callback, host=self.host, port=self.port)
         async with self.server:
             logging.info("Server started")
@@ -37,11 +37,11 @@ class Server:
 
     async def connection_callback(self, reader_stream, writer_stream):
         """
-       Function called when connection is created and terminating when the user disconnects
+        Function called when connection is created and terminating when the user disconnects
 
-       :param reader_stream: stream from which messages from the user are read
-       :param writer_stream: stream to which messages are written for the user
-       """
+        :param reader_stream: stream from which messages from the user are read
+        :param writer_stream: stream to which messages are written for the user
+        """
         user = User(writer_stream, writer_stream.get_extra_info("peername"))
         self.users.append(user)
         logging.info("New client connected: %s", user.peername)
@@ -61,11 +61,11 @@ class Server:
 
     async def parse_message(self, user, msg):
         """
-       Depending on user status and his message call necessary function
+        Depending on user status and his message call necessary function
 
-       :param user
-       :param msg
-       """
+        :param user
+        :param msg
+        """
         if msg == "help":
             await self.send_help(user)
         elif user.status == "unknown" and str(msg).startswith("register"):
@@ -82,19 +82,19 @@ class Server:
 
     async def send_help(self, user):
         """
-       Send help message to the user
+        Send help message to the user
 
-       :param user
-       """
+        :param user
+        """
         await self.send_msg(user, self.help_msg)
 
     async def register_new_user(self, user, register_data):
         """
-       Add credentials of user into database
+        Add credentials of user into database
 
-       :param user
-       :param register_data: string from user message containing register data
-       """
+        :param user
+        :param register_data: string from user message containing register data
+        """
         try:
             login, pswd, pswd_confirm = register_data.strip().split(" ", 2)
         except Exception:
@@ -130,11 +130,11 @@ class Server:
 
     async def authenticate(self, user, login_data):
         """
-       Check credentials of user in database
+        Check credentials of user in database
 
-       :param user: this is a first param
-       :param login_data: string from user message containing credentials
-       """
+        :param user
+        :param login_data: string from user message containing credentials
+        """
         try:
             login, pswd = login_data.strip().split(" ", 1)
         except Exception:
@@ -166,11 +166,11 @@ class Server:
 
     async def send_msg_all(self, user, msg):
         """
-       Send message to all authenticated users
+        Send message to all authenticated users
 
-       :param user
-       :param msg
-       """
+        :param user
+        :param msg
+        """
         msg = user.login + "->all:" + msg
         for usr in self.users:
             if usr.status == "authenticated" and usr.login != user.login:
@@ -206,10 +206,10 @@ class Server:
 
     async def send_err_msg(self, user):
         """
-       Send error message to the user
+        Send error message to the user
 
-       :param user
-       """
+        :param user
+        """
         msg = "Incorrect format of message or you don't have enough rights. Send 'help' message for information"
         logging.info("%s: %s", (user.login or user.peername), msg)
         await self.send_msg(user, msg)
